@@ -38,18 +38,15 @@ const Hero = () => {
           </div>
             <TextGenerateEffect className='text-center text-[100px] md:text-5xl lg:text-xl md:w-2xl' words='Track your daily coding streaks, monitor progress, and climb the ranks with CodeSphere'/>
 
-            <p className="text-center mt-3 mb-4 text-sm md:text-lg lg:text-xl font-bold relative group">
+         
+            {/* <p className="text-center mt-3 mb-4 text-sm md:text-lg lg:text-xl font-bold relative group">
   <span className="uppercase bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 animate-pulse">
-    RISE
+    RISE to the top
   </span>{" "}
-  <span className="bg-clip-text text-transparent bg-gradient-to-r from-red-400 via-yellow-500 to-pink-500">
-    to the
-  </span>{" "}
-  <span className="bg-clip-text text-transparent bg-gradient-to-r from-orange-400 via-red-500 to-rose-600">
-    Top
-  </span>
-  <span className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r  transform scale-x-0 transition-transform duration-300 group-hover:scale-x-100"></span>
-</p>
+  
+</p>  */}
+ 
+  {/* <span className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r  transform scale-x-0 transition-transform duration-300 group-hover:scale-x-100"></span>  */}
             <MagicButton title={"Go the next level"} icon={<FaLocationArrow/>} position='right'/>
         </div>
     </div>
