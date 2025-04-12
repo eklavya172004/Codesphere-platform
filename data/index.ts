@@ -20,7 +20,7 @@ export const navItems = [
       id: 2,
       title: "Code Every Day, Win Every Way! 🔥",
       description: "Build epic streaks across competitive platforms.",
-      className: "lg:col-span-2 md:col-span-3 md:row-span-2",
+      className: "lg:col-span-2 md:col-span-3 md:row-span-2  md:h-80",
       imgClassName: "",
       titleClassName: "justify-start",
       img: "",
