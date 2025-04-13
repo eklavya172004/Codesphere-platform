@@ -1,10 +1,10 @@
-Below is a well-structured and professional README file tailored for your **CodeSphere** project. Since I’ve been assisting you with various aspects of CodeSphere (e.g., landing page, member details component, and database tasks), I’ll incorporate those elements and provide a general overview based on the context. Feel free to adjust the details (e.g., repository URL, contributors, or specific features) to match your project’s current state.
+
 
 ---
 
 # CodeSphere
 
-![CodeSphere Logo](https://via.placeholder.com/150) <!-- Replace with actual logo URL or remove if not available -->
+![CodeSphere]<!-- Replace with actual logo URL or remove if not available -->
 
 **Stay Consistent, Code Smarter, Win Bigger! 🔥**
 
