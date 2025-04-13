@@ -4,8 +4,6 @@
 
 # CodeSphere
 
-![CodeSphere]<!-- Replace with actual logo URL or remove if not available -->
-
 **Stay Consistent, Code Smarter, Win Bigger! 🔥**
 
 CodeSphere is a web-based platform designed to help developers track their coding consistency, monitor daily streaks, and compete on leaderboards. It integrates with platforms like Codeforces, LeetCode, and GitHub to provide a comprehensive view of your coding journey, fostering community engagement and personal growth.
