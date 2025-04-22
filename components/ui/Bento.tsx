@@ -7,9 +7,15 @@ import { useState } from "react";
 import animationData from "@/data/confetti.json"
 import MagicButton from "./MagicButton";
 import { IoCopyOutline } from 'react-icons/io5';
-import { TextHoverEffect } from "./TextHover";
+import dynamic from "next/dynamic";
+// import { TextHoverEffect } from "./TextHover";
 // import { animate } from "motion/react";
 // import { Globe } from "./Globe";
+
+const Lottie = dynamic(() => import("react-lottie"), {
+  ssr: false, // This is the key - disable SSR for this component
+});
+
 export const BentoGrid = ({
   className,
   children,
