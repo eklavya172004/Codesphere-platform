@@ -1,0 +1,3 @@
+├── dailyUpdate.js    # Daily score recalculation
+│   │   ├── contestTracker.js # Major contest tracking
+│   │   └── inactivityDecay.js # Decay score calculation

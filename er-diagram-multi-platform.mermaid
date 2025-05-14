@@ -1,0 +1,201 @@
+erDiagram
+    %% PostgreSQL (Relational) Entities
+    USERS ||--o{ USER_PLATFORMS : "has accounts on"
+    USERS ||--o{ GROUP_MEMBERSHIPS : "belongs to"
+    USERS ||--o{ ACTIVITY_SUMMARIES : "has"
+    USERS ||--o{ STREAK_SUMMARIES : "maintains"
+    
+    PLATFORMS ||--o{ USER_PLATFORMS : "is used by"
+    PLATFORMS ||--o{ PLATFORM_METRICS : "defines"
+    
+    GROUPS ||--o{ GROUP_MEMBERSHIPS : "includes"
+    GROUPS ||--o{ LEADERBOARDS : "has"
+    
+    LEADERBOARDS ||--o{ LEADERBOARD_ENTRIES : "contains"
+    LEADERBOARDS }|--|| SCORING_RULES : "uses"
+    
+    %% MongoDB (Document) Collections
+    PLATFORM_PROFILES ||--o{ PLATFORM_ACTIVITIES : "generates"
+    PLATFORM_PROFILES ||--o{ CONTEST_PARTICIPATIONS : "includes"
+    
+    DAILY_ACTIVITIES ||--o{ ACTIVITY_EVENTS : "composed of"
+    
+    %% PostgreSQL Entities
+    USERS {
+        uuid user_id PK
+        string username UK
+        string email UK
+        string password_hash
+        datetime created_at
+        datetime last_login
+        string profile_image_url
+        boolean is_active
+        string timezone
+    }
+    
+    PLATFORMS {
+        uuid platform_id PK
+        string name UK
+        string api_base_url
+        string logo_url
+        boolean is_active
+        json api_config
+        string activity_types
+    }
+    
+    USER_PLATFORMS {
+        uuid id PK
+        uuid user_id FK
+        uuid platform_id FK
+        string handle UK
+        datetime last_sync
+        boolean is_public
+        json auth_tokens
+    }
+    
+    PLATFORM_METRICS {
+        uuid metric_id PK
+        uuid platform_id FK
+        string metric_name
+        string display_name
+        string metric_type
+        float weight_factor
+        string aggregation_method
+    }
+    
+    GROUPS {
+        uuid group_id PK
+        string name
+        string description
+        string group_type
+        boolean is_private
+        uuid created_by FK
+        datetime created_at
+    }
+    
+    GROUP_MEMBERSHIPS {
+        uuid id PK
+        uuid user_id FK
+        uuid group_id FK
+        string role
+        datetime joined_at
+    }
+    
+    LEADERBOARDS {
+        uuid leaderboard_id PK
+        string name
+        string type
+        uuid scoring_rule_id FK
+        uuid group_id FK
+        boolean is_active
+        datetime last_updated
+        string update_frequency
+    }
+    
+    SCORING_RULES {
+        uuid rule_id PK
+        string name
+        json platform_weights
+        float decay_rate
+        integer decay_period_days
+        json bonuses
+        json penalties
+    }
+    
+    LEADERBOARD_ENTRIES {
+        uuid entry_id PK
+        uuid leaderboard_id FK
+        uuid user_id FK
+        float score
+        integer rank
+        datetime calculated_at
+        json platform_scores
+    }
+    
+    ACTIVITY_SUMMARIES {
+        uuid id PK
+        uuid user_id FK
+        date summary_date
+        json platform_activities
+        integer total_contribution_points
+        float current_decay_factor
+    }
+    
+    STREAK_SUMMARIES {
+        uuid id PK
+        uuid user_id FK
+        uuid platform_id FK
+        integer current_streak
+        integer longest_streak
+        date streak_start
+        date last_activity
+    }
+    
+    %% MongoDB Collections
+    PLATFORM_PROFILES {
+        ObjectId _id
+        uuid user_id
+        uuid platform_id
+        string handle
+        json profile_data
+        array problems_solved
+        array contests
+        json ratings_history
+        json achievements
+        datetime last_updated
+    }
+    
+    PLATFORM_ACTIVITIES {
+        ObjectId _id
+        uuid user_id
+        uuid platform_id
+        string activity_type
+        datetime timestamp
+        string reference_id
+        json details
+        integer points_value
+    }
+    
+    CONTEST_PARTICIPATIONS {
+        ObjectId _id
+        uuid user_id
+        uuid platform_id
+        string contest_id
+        datetime start_time
+        datetime end_time
+        integer rank
+        float score
+        json problem_attempts
+        string performance_category
+    }
+    
+    DAILY_ACTIVITIES {
+        ObjectId _id
+        uuid user_id
+        date activity_date
+        json platform_activity_counts
+        integer total_activity_score
+        json activity_breakdown
+    }
+    
+    ACTIVITY_EVENTS {
+        ObjectId _id
+        uuid user_id
+        uuid platform_id
+        string event_type
+        datetime timestamp
+        string reference_id
+        json payload
+        boolean counted_for_streak
+    }
+    
+    GITHUB_DATA {
+        ObjectId _id
+        uuid user_id
+        string repo_name
+        array commits
+        array pull_requests
+        array issues
+        datetime last_fetched
+        json contribution_stats
+    }
