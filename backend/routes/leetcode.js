@@ -131,7 +131,7 @@ exports.leetcode = (req, res) => {
 };
 
 exports.contest = (req,res) => {
-    console.log("Received request for contest data"); 
+    // console.log("Received request for contest data"); 
   fetch("https://leetcode.com/graphql",{
     method:'POST',
     headers:{
@@ -145,7 +145,7 @@ exports.contest = (req,res) => {
   .then(result => result.json())
   .then(data => {
 
-      console.log("Raw contest data from LeetCode:", JSON.stringify(data, null, 2)); // 👈 Raw data
+      // console.log("Raw contest data from LeetCode:", JSON.stringify(data, null, 2)); // Raw data
 
 
     if(data.errors){
