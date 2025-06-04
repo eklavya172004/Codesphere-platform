@@ -78,6 +78,38 @@ const contestData = (data) => {
   ))
 }
 
+//fetching user contests if he participated
+// const fetchUserContest = async (username) => {
+//   try {
+//     const res = await fetch(`https://leetcode.com/contest/api/user-rank/${username}/`,{
+//           headers: {
+//       'Referer': `https://leetcode.com/${username}/`,
+//       'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36'
+//     }
+//     });
+
+//     if (!res.ok) {
+//       console.warn(`User contest data not available for: ${username}`);
+//       return null;
+//     }
+
+//     const data = await res.json();
+//     console.log(data)
+//     return {
+//       attended: data.attended,
+//       ranking: data.ranking,
+//       score: data.score,
+//       finishTimeSeconds: data.finish_time_in_seconds,
+//       contestTitle: data.contest?.title,
+//       contestSlug: data.contest?.contest_slug,
+//       startTime: data.contest?.start_time
+//     };
+//   } catch (err) {
+//     console.error("Error fetching user contest data:", err.message);
+//     return null; // Return null instead of throwing
+//   }
+// };
+
 const fetchedData = (data) =>  {
     const senddata = {
          totalSolved: data.matchedUser.submitStats.acSubmissionNum[0].count,
@@ -100,10 +132,11 @@ const fetchedData = (data) =>  {
 }
 
 // Export the API endpoint handler function
-exports.leetcode = (req, res) => {
+exports.leetcode = async (req, res) => {
   let user = req.params.id;
-  
-  fetch('https://leetcode.com/graphql', {
+
+  try {
+      const graphqlRes =  await fetch('https://leetcode.com/graphql', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -114,20 +147,34 @@ exports.leetcode = (req, res) => {
       variables: {username: user}
     }),
   })
-  .then(result => 
-    result.json()
-  )
-  .then(data => {
-    if(data.errors){
-      res.send(data);
-    } else {
-      res.send(fetchedData(data.data));
+
+      
+    const graphqlData = await graphqlRes.json();
+
+    
+    if (graphqlData.errors) {
+      return res.status(400).send(graphqlData);
     }
-  })
-  .catch(err => {
-    console.error('Error', err);
-    res.send(err);
-  });
+
+        const userData = await fetchedData(graphqlData.data);
+
+          //  let contestInfo = null;
+
+          //  try {
+            
+          //   contestInfo = fetchUserContest(user);
+
+          //  } catch (error) {
+          //     console.warn("Could not fetch contest info for user:", user);
+          //  }
+
+               res.send({
+              ...userData
+                  });
+  } catch (error) {
+        console.error('LeetCode API Error:', err);
+         res.status(500).send({ error: 'Failed to fetch LeetCode user data.' });
+  }
 };
 
 exports.contest = (req,res) => {

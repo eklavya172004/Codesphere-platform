@@ -8,6 +8,7 @@ const {rateLimit} = require('express-rate-limit');
 const leetcode  = require('./routes/leetcode');
 const codechef = require('./routes/codechefs');
 const codeforces = require('./routes/codeforces');
+const github = require("./routes/github");
 
 const initializePassport = require('./config/passportConfig');
 initializePassport(passport);
@@ -77,6 +78,9 @@ app.use('/api/codechefs/:handle',specificLimiter,codechef.codechef);
 
 //codeforces data fetching
 app.use('/api/codeforces/:handle',specificLimiter,codeforces.codeforces);
+
+//github data feteching
+app.use('/auth/github',specificLimiter,github);
 
 
 app.use(globalErrorHandler);

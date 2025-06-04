@@ -9,6 +9,7 @@ const links = [
   { name: "LeetCode", href: "/dashboard/leetcode" },
   { name: "Codeforces", href: "/dashboard/Codeforces" },
   { name: "Codechefs", href: "/dashboard/Codechefs" },
+  {name:"Github",href:"/dashboard/Github"}
 ];
 
 export default function Sidebar() {
