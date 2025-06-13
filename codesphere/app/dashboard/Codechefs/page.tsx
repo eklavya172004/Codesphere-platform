@@ -1,6 +1,6 @@
 "use client";
 // app/dashboard/codechefs/page.tsx
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Search, User, Star, Globe, Calendar, Code, TrendingUp, Activity, ExternalLink, Award, Target } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
@@ -9,6 +9,23 @@ const CodeChefProfileViewer = () => {
   const [profileData, setProfileData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+
+useEffect(() => {
+  const storedData = localStorage.getItem('user');
+  if(storedData){
+    try {
+      const parseData = JSON.parse(storedData);
+
+      if(parseData.codeforces_username){
+        setUsername(parseData.codeforces_username);
+        fetchProfile();
+      }
+    } catch (err) {
+      console.error('Error parsing stored user:', err);
+    }
+  }
+},[]);
+
 
   const fetchProfile = async () => {
     if (!username.trim()) return;

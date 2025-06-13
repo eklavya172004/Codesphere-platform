@@ -5,16 +5,17 @@ const session = require('express-session');
 const flash = require('express-flash');
 const passport = require('passport');
 const {rateLimit} = require('express-rate-limit');
-const leetcode  = require('./routes/leetcode');
-const codechef = require('./routes/codechefs');
-const codeforces = require('./routes/codeforces');
+const leetcode  = require('./services/leetcode');
+const codechef = require('./services/codechefs');
+const codeforces = require('./services/codeforces');
 const github = require("./routes/github");
+const cookieParser = require("cookie-parser");
+const jwt = require('jsonwebtoken');
 
-const initializePassport = require('./config/passportConfig');
-initializePassport(passport);
 
 const app = express();
 
+// Rate limiters
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000,
     limit: 100,
@@ -37,12 +38,17 @@ app.use(cors({
 }
 ));
 
+// Rate limiter
 app.use(limiter);
 
+// Body parsers
 app.use(express.json());
-
 app.use(express.urlencoded({ extended: false }));
 
+//Cookie parser BEFORE session
+app.use(cookieParser());
+
+// Session setup
 app.use(
     session({
         secret:'secret',
@@ -55,14 +61,15 @@ app.use(
         httpOnly: true,
         secure: false, // set to true if using HTTPS
         sameSite: 'lax',
-        maxAge: 24 * 60 * 60 * 1000
+        maxAge: 1000 * 60 * 60 * 24, 
     }
     })
 )
 
+
+//// Passport and flash
 app.use(passport.initialize());
 app.use(passport.session());
-
 app.use(flash());
 
 app.use('/api/user',userRouter);

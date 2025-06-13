@@ -1,3 +1,5 @@
+const e = require("express");
+
 const query = `
   query getUserProfile($username: String!) {
     allQuestionsCount {
@@ -112,7 +114,7 @@ const contestData = (data) => {
 
 const fetchedData = (data) =>  {
     const senddata = {
-         totalSolved: data.matchedUser.submitStats.acSubmissionNum[0].count,
+        totalSolved: data.matchedUser.submitStats.acSubmissionNum[0].count,
         totalSubmissions:  data.matchedUser.submitStats.totalSubmissionNum,
         totalQuestions: data.allQuestionsCount[0].count,
         easySolved: data.matchedUser.submitStats.acSubmissionNum[1].count,
@@ -167,9 +169,13 @@ exports.leetcode = async (req, res) => {
           //  } catch (error) {
           //     console.warn("Could not fetch contest info for user:", user);
           //  }
+        const scoreDetails  = await calculateGamification(userData);
 
+
+        // console.log(userData,scoreDetails);
                res.send({
-              ...userData
+              ...userData,
+              gamificationScore: scoreDetails
                   });
   } catch (error) {
         console.error('LeetCode API Error:', err);
@@ -204,4 +210,64 @@ exports.contest = (req,res) => {
     console.error('Error', err);
     res.send(err);
   })
+}
+
+//checking if the user has recently solved problem
+const getProblemSolvedToday = (recentSubmissions) => {
+  const now = Date.now()/1000;
+  const OneDayAgo = now - 24*60*60;
+  //converts the current time from milliseconds to seconds, so you can accurately compare it with sub.timestamp, which is already in seconds.
+  return recentSubmissions.filter(sub => parseInt(sub.timestamp) >= OneDayAgo && sub.statusDisplay === 'Accepted');
+}
+
+//streak maintained 
+const dailyStreak = (submissionCalendar) => {
+  const submissionDates = new Set(
+    Object.keys(submissionCalendar).map(ts =>
+      new Date(parseInt(ts) * 1000).toISOString().slice(0, 10) // 'YYYY-MM-DD'
+    )
+  );
+
+  const now = new Date();
+  now.setUTCHours(0, 0, 0, 0); // Normalize to UTC midnight
+
+  let streak = 0;
+
+  // Check for yesterday, day before, and 3 days ago (excluding today)
+  for (let i = 1; i <= 2; i++) {
+    const day = new Date(now);
+    day.setUTCDate(now.getUTCDate() - i);
+
+    const dateStr = day.toISOString().slice(0, 10);
+
+    if (submissionDates.has(dateStr)) {
+      streak++;
+    } else {
+      return false; // streak broken
+    }
+  }
+
+  return true;
+};
+
+const calculateGamification = (userData) => {
+  const recentAccepted = getProblemSolvedToday(userData.recentSubmissions);
+  const streak = dailyStreak(userData.submissionCalendar);
+  let totalpoints = 0 ;
+  // for( let sub of recentAccepted){
+  //   if(sub.difficulty === "Hard"){
+  //     totalpoints += 20;
+  //   }else if(sub.difficulty === "Medium") totalpoints += 15;
+  //   else if (sub.difficulty === "Easy") totalpoints += 10;
+  // }
+
+  if(streak){
+    totalpoints += 10;
+  }
+
+  return {
+    Totalpoints:totalpoints + recentAccepted.length * 10,
+    dailyProblemPoints: recentAccepted.length * 10,
+    streak: streak ? "Yes" : "No",
+  }
 }
