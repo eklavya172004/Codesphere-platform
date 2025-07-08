@@ -3,7 +3,7 @@
 How I am building this?
 ![alt text](image.png)
 
-#Routing in my project-management
+### Routing in my project-management
 
 In Next.js, routing is based on file or folder structure, meaning each file inside the `pages` or `app` directory automatically becomes a route. However, I prefer code-based routing because with folder-based routing, I need to carefully manage the directory structure, file names, and nesting to ensure the correct routes are generated. Code-based routing gives me more flexibility and control, allowing me to define routes programmatically, handle dynamic parameters, and implement custom logic for navigation and access control. This approach can make the routing logic more explicit and maintainable, especially as the project grows in complexity.
 
